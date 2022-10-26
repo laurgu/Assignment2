@@ -12,7 +12,6 @@ public class ServerConsole implements ChatIF{
 	final public static int DEFAULT_PORT = 5555;
 
 	
-	//Constructor
 	public ServerConsole(int port) {
 		
 		try {
@@ -32,7 +31,6 @@ public class ServerConsole implements ChatIF{
 		
 	}
 	
-	//Read messages from the console
 	public void accept() {
 		
 			try {
@@ -49,13 +47,11 @@ public class ServerConsole implements ChatIF{
 			}
 	}
 
-	//Display messages
 	public void display(String message) {
 		
 		System.out.println("SERVER MSG> " + message);
 	}
 	
-	//Listen for messages from clients
 	private void listen() {
 		try {
 			echoServer.listen();
@@ -66,7 +62,7 @@ public class ServerConsole implements ChatIF{
 	}
 	
 
-	//Main program on server side
+	
 	public static void main(String args[]) {
 		
 		int port = 5555; //Port to listen on
@@ -75,12 +71,9 @@ public class ServerConsole implements ChatIF{
 	    {
 	      port = Integer.parseInt(args[0]); //Get port from command line
 	    }
-	    catch(NumberFormatException e)
+	    catch(Throwable t)
 	    {
 	      port = DEFAULT_PORT; //Set port to 5555
-	    }
-	    catch(ArrayIndexOutOfBoundsException e) {
-	    	port = DEFAULT_PORT;
 	    }
 		
 	    //EchoServer sv = new EchoServer(port);

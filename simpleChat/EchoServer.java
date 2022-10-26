@@ -23,7 +23,9 @@ public class EchoServer extends AbstractServer
 	
 	ChatIF serverUI;
 	
-	boolean isClosed;
+	private boolean isClosed;
+	
+	final private String loginKey = "loginID";
   //Class variables *************************************************
   
   /**
@@ -57,28 +59,55 @@ public class EchoServer extends AbstractServer
   public void handleMessageFromClient
     (Object msg, ConnectionToClient client) {
     
-   /* String message = msg.toString();
-    String messageSubstring = message.substring(9,message.length()-1);
-  
-	if(message == "#quit") {
-		clientDisconnected(client);
-		client.close();
-	}
-	else if(message == "#logoff") {
-		clientDisconnected(client);
-	}
-	else if(messageSubstring == "#sethost") {
-		setHost(message.substring(9,message.length()-1));
-	}
-	else if(messageSubstring == "#setport") {
-		int port = Integer.parseInt(message.substring(9,message.length()-1)); 
-		setPort(port);
-	}*/
-	  
-    System.out.println("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+	  if(msg.toString().startsWith("#login")) {
+		  
+		  
+		  handleLogin(msg.toString(),client);
+	  }
+	  else {
+		String loginID = client.getInfo(loginKey).toString();
+		
+		String message = loginID + "> " + msg.toString();
+;	   
+		System.out.println("Message received: " + msg + " from <" + loginID + ">");
+	    
+		
+		this.sendToAllClients(message);
+	  }
   }
   
+  private void handleLogin(String login, ConnectionToClient client) {
+	  
+	  if(login.length()<7) {
+		  return;
+	  }
+	  serverUI.display("Message received: " + login + " from " + client.getInfo(loginKey));
+	  
+	  if((login.substring(0,6)).equals("#login")) {
+		  
+		  String loginID = login.substring(7,login.length()-1);
+		  
+		  if(client.getInfo(loginKey)==null) {
+			  client.setInfo(loginKey, loginID);
+			  serverUI.display("<" + client.getInfo(loginKey)+"> has logged on.");
+		  }
+		  else {
+			  
+			 try {
+				client.sendToClient("Error cannot login again. Terminating connection");
+			} catch (IOException e) {
+				serverUI.display("Error sending message to client");
+			}
+			 
+			 try {
+				client.close();
+			} catch (IOException e) {
+				//method that makes client close
+			}			 
+		  }
+		  
+	  }
+  }
 
   
   public void handleMessageFromServerUI(String message) {
@@ -169,14 +198,8 @@ public class EchoServer extends AbstractServer
    */
   @Override
   protected void serverClosed() {
-	  isClosed = true;
-  }
-  
-  //THIS IS FOR TESTING PURPOSES DELETE THIS LATER
-  private void getStatus() {
-	  if(!isClosed) {
-		  serverUI.display("isClosed is false");
-	  }
+	 // isClosed = true;
+	  
   }
 
     
@@ -186,7 +209,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
-	  isClosed = false;
+	  //isClosed = false;
     System.out.println
       ("Server listening for connections on port " + getPort());
   }
@@ -197,7 +220,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStopped()
   {
-	  isClosed = true;
+	  //isClosed = true;
     System.out.println
       ("Server has stopped listening for connections.");
   }
@@ -212,65 +235,33 @@ public class EchoServer extends AbstractServer
 	  try {
 		client.sendToClient("You are now connected! Welcome!");
 	} catch (IOException e) {
-		
+		serverUI.display("Error sending welcome message to client");
 		
 	}
+	  
+	  serverUI.display("A new client has connected to the server.");  
 	  
   }
 
   /**
-   * Hook method called each time a client disconnects.
+   * Implements method called each time a client disconnects.
    * The default implementation does nothing. The method
    * may be overridden by subclasses but should remains synchronized.
    *
    * @param client the connection with the client.
    */
+  @Override
   synchronized protected void clientDisconnected(ConnectionToClient client) {
-	  
+	  System.out.println("CALLED");
+	  serverUI.display("<"+client.getInfo(loginKey)+"> has disconnected");
+
 	  try {
 		client.sendToClient("You have disconnected! Goodbye!");
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	} catch (Exception e) {
+		
 	}
   }
 }
   
   
-  
-  //Class methods ***************************************************
-  
-  /**
-   * This method is responsible for the creation of 
-   * the server instance (there is no UI in this phase).
-   *
-   * @param args[0] The port number to listen on.  Defaults to 5555 
-   *          if no argument is entered.
-   */
-  /*public static void main(String[] args) 
-  {
-    int port = 5555; //Port to listen on
-
-    try
-    {
-      port = Integer.parseInt(args[0]); //Get port from command line
-    }
-    catch(Throwable t)
-    {
-      port = DEFAULT_PORT; //Set port to 5555
-    }
-	
-    EchoServer sv = new EchoServer(port);
-    
-    try 
-    {
-      sv.listen(); //Start listening for connections
-    } 
-    catch (Exception ex) 
-    {
-    	System.out.println(ex.getMessage());
-      System.out.println("ERROR - Could not listen for clients!");
-    }
-  }
-}*/
-//End of EchoServer class
+ 

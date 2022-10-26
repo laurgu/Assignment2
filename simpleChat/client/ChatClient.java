@@ -26,6 +26,8 @@ public class ChatClient extends AbstractClient
    * the display method in the client.
    */
   ChatIF clientUI; 
+  
+  String loginID;
 
   
   //Constructors ****************************************************
@@ -38,11 +40,12 @@ public class ChatClient extends AbstractClient
    * @param clientUI The interface type variable.
    */
   
-  public ChatClient(String host, int port, ChatIF clientUI) 
+  public ChatClient(String host, int port, String loginID, ChatIF clientUI) 
     throws IOException 
   {
     super(host, port); //Call the superclass constructor
     this.clientUI = clientUI;
+    this.loginID = loginID;
     openConnection();
   }
 
@@ -66,11 +69,12 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromClientUI(String message)
   {
+	  boolean isCommand = false;
 	  if(message.startsWith("#")){
-		 handleCommand(message);
+		 isCommand = handleCommand(message);
 	  }
 	  
-	 else {
+	  if(!isCommand){
 		try
 	    {
 	      sendToServer(message);
@@ -86,7 +90,7 @@ public class ChatClient extends AbstractClient
 	
   }
  
-  private void handleCommand(String message) {
+  private boolean handleCommand(String message) {
 	  
 	  String commandSubstring ="";
 	  String portOrHost = "";
@@ -148,9 +152,10 @@ public class ChatClient extends AbstractClient
 	}
 	
 	else {
-		return;
+		return false;
 	}
 	
+	return true;
 	  
   }
   
@@ -181,6 +186,22 @@ public class ChatClient extends AbstractClient
 	  
 	  clientUI.display("Connection closed");
 	  
+	}
+  
+
+	/**
+	 * Implemented method called after a connection has been established. The default
+	 * implementation does nothing. It may be overridden by subclasses to do
+	 * anything they wish.
+	 */
+  @Override
+	protected void connectionEstablished() {
+	  try {
+		sendToServer("#login<"+loginID+">");
+		clientUI.display("<"+loginID+"> has logged on.");
+	} catch (IOException e) {
+		clientUI.display("Could not send message to server");
+	}
 	}
 
   

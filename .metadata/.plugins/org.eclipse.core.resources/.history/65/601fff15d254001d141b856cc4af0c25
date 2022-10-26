@@ -1,0 +1,40 @@
+import java.io.IOException;
+import java.util.*;
+
+import common.*;
+import ocsf.server.*;
+
+
+public class ServerConsole implements ChatIF{
+	
+	Scanner fromConsole;
+	
+	EchoServer echoServer;
+	
+	public ServerConsole(int port) {
+		fromConsole = new Scanner(System.in);
+
+	}
+	
+	public void accept() {
+		try {
+			String message;
+			
+			while(true) {
+				message = fromConsole.nextLine();
+				display(message);
+			}
+		}
+		catch(Exception e){
+			
+		}
+	}
+
+	public void display(String message) {
+		echoServer.handleMessageFromServerUI(message);
+	
+	}
+
+
+
+}

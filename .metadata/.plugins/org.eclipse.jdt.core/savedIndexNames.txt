@@ -1,0 +1,5 @@
+INDEX VERSION 1.131+C:\Users\laure\OneDrive\Documents\School\OTTAWA\FALL 2022\SEG 2105\Assignments\Assignment2\.metadata\.plugins\org.eclipse.jdt.core
+762397314.index
+2219000855.index
+1865797976.index
+2568234942.index

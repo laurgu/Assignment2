@@ -64,6 +64,13 @@ public class EchoServer extends AbstractServer
 		  
 		  handleLogin(msg.toString(),client);
 	  }
+	  
+	  else if(msg.toString().equals("#logoff")) {
+		  serverUI.display("<"+client.getInfo(loginKey).toString()+"> has logged off");
+		  this.sendToAllClients("Goodbye <" + client.getInfo(loginKey).toString()+">!");
+		  return;
+	  }
+	  
 	  else {
 		String loginID = client.getInfo(loginKey).toString();
 		
@@ -185,6 +192,9 @@ public class EchoServer extends AbstractServer
 	 else if(command.equals("#getport")) {
 		 serverUI.display("PORT: " + getPort());
 	 }
+	 else if(command.equals("#numclients")) {
+		 serverUI.display("Number of clients: "+getNumberOfClients());
+	 }
 	 else {
 		 return;
 	 }
@@ -242,6 +252,8 @@ public class EchoServer extends AbstractServer
 	  serverUI.display("A new client has connected to the server.");  
 	  
   }
+  
+  
 
   /**
    * Implements method called each time a client disconnects.
@@ -252,7 +264,6 @@ public class EchoServer extends AbstractServer
    */
   @Override
   synchronized protected void clientDisconnected(ConnectionToClient client) {
-	  System.out.println("CALLED");
 	  serverUI.display("<"+client.getInfo(loginKey)+"> has disconnected");
 
 	  try {
@@ -261,6 +272,21 @@ public class EchoServer extends AbstractServer
 		
 	}
   }
+  
+  /**
+   * Implements method called each time an exception is thrown in a
+   * ConnectionToClient thread.
+   * The method may be overridden by subclasses but should remains
+   * synchronized.
+   *
+   * @param client the client that raised the exception.
+   * @param Throwable the exception thrown.
+   */
+  @Override
+  synchronized protected void clientException(
+    ConnectionToClient client, Throwable exception) {}
+  
+  	
 }
   
   

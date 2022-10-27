@@ -83,7 +83,6 @@ public class ServerConsole implements ChatIF{
 	    	port = DEFAULT_PORT;
 	    }
 		
-	    //EchoServer sv = new EchoServer(port);
 	    
 	    ServerConsole serverConsole = new ServerConsole(port);
 	    

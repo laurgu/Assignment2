@@ -106,6 +106,7 @@ public class ChatClient extends AbstractClient
 	}
 	else if(message.compareTo("#logoff") == 0) {
 		try {
+			sendToServer("#logoff");
 			closeConnection();
 		} catch (Exception e) {
 			clientUI.display("Error logging out");

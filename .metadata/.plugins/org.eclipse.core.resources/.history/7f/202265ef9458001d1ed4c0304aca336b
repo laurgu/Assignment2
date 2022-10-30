@@ -12,10 +12,7 @@ public class ServerConsole implements ChatIF{
 	final public static int DEFAULT_PORT = 5555;
 
 	
-	/**
-	 * Constructor that initialized Echoserver instance variable at param port
-	 * @param port. The port that the server will operate on.
-	 */
+	//Constructor
 	public ServerConsole(int port) {
 		
 		try {
@@ -35,10 +32,7 @@ public class ServerConsole implements ChatIF{
 		
 	}
 	
-	/**
-	 * This method waits for input from the console. Once it is 
-   * received, it sends it to the server's message handler.
-	 */
+	//Read messages from the console
 	public void accept() {
 		
 			try {
@@ -55,12 +49,7 @@ public class ServerConsole implements ChatIF{
 			}
 	}
 
-	/**
-	* This method overrides the method in the ChatIF interface.  It
-   * displays a message onto the screen.
-   *
-   * @param message The string to be displayed.
-	 */
+	//Display messages
 	public void display(String message) {
 		
 		System.out.println("SERVER MSG> " + message);
@@ -77,10 +66,7 @@ public class ServerConsole implements ChatIF{
 	}
 	
 
-	/**
-	 * This method is responsible for the creation of the server UI
-	 * @param args[0]. The port to listen on.
-	 */
+	//Main program on server side
 	public static void main(String args[]) {
 		
 		int port = 5555; //Port to listen on

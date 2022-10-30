@@ -89,13 +89,6 @@ public class ChatClient extends AbstractClient
 	}
 	
   }
-  /**
-   * Helper function that handles commands from the UI.
-   * @param message. The message sent from the UI passed on from
-   * handleMessageFromClientUI function
-   * @return boolean. If the passed on message is a valid command
-   * return value is true. Otherwise it is false.
-   */
  
   private boolean handleCommand(String message) {
 	  
@@ -108,6 +101,7 @@ public class ChatClient extends AbstractClient
 	  }
 	  
 	if(message.compareTo("#quit") == 0) {
+		//need to make sure the server is terminated before exiting the program
 		quit();
 	}
 	else if(message.compareTo("#logoff") == 0) {

@@ -83,12 +83,6 @@ public class EchoServer extends AbstractServer
 	  }
   }
   
-  /**
-   * Helper function that handles the login command from the client.
-   * @param login. The login information of the client passed on from
-   * handleMessageFromClient function.
-   * @param client. The connection from which the command originated.
-   */
   private void handleLogin(String login, ConnectionToClient client) {
 	  
 	  if(login.length()<7) {
@@ -122,10 +116,7 @@ public class EchoServer extends AbstractServer
 	  }
   }
 
-  /**
-   * Handles message from the server UI
-   * @param message. The message from the UI.
-   */
+  
   public void handleMessageFromServerUI(String message) {
 	  
 	  if(message.startsWith("#")){
@@ -208,12 +199,24 @@ public class EchoServer extends AbstractServer
 		 return;
 	 }
   }
+  
+  /**
+   * Implements method called when the server is closed.
+   * The default implementation does nothing. This method may be
+   * overriden by subclasses. When the server is closed while still
+   * listening, serverStopped() will also be called.
+   */
+  @Override
+  protected void serverClosed() {
+	 // isClosed = true;
+	  
+  }
+
     
   /**
    * This method overrides the one in the superclass.  Called
    * when the server starts listening for connections.
    */
-  @Override
   protected void serverStarted()
   {
 	  //isClosed = false;
@@ -225,7 +228,6 @@ public class EchoServer extends AbstractServer
    * This method overrides the one in the superclass.  Called
    * when the server stops listening for connections.
    */
-  @Override
   protected void serverStopped()
   {
 	  //isClosed = true;

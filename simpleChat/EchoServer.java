@@ -150,10 +150,11 @@ public class EchoServer extends AbstractServer
 	  
 	 if(command.equals("#quit")) {
 		 try {
+			 serverUI.display("Server has quit");
 			close();
 			System.exit(1);
 		} catch (Exception e) {
-			System.out.println("Error quitting");
+			serverUI.display("Error quitting");
 		}
 	 }
 	 else if(command.equals("#stop")) {
@@ -175,10 +176,9 @@ public class EchoServer extends AbstractServer
 		 else {
 			 try {
 				 setPort(Integer.parseInt(port));
-				 return;
+				 serverUI.display("Now listening on port " + getPort());
 			 }
 			 catch(StringIndexOutOfBoundsException e) {
-				 serverUI.display("HIT");
 			 }
 			 catch(NumberFormatException ne) {
 				 serverUI.display("Invalid port number");
@@ -205,7 +205,7 @@ public class EchoServer extends AbstractServer
 		 serverUI.display("Number of clients: "+getNumberOfClients());
 	 }
 	 else {
-		 return;
+		 serverUI.display("Not a valid command");
 	 }
   }
     
@@ -216,7 +216,7 @@ public class EchoServer extends AbstractServer
   @Override
   protected void serverStarted()
   {
-	  //isClosed = false;
+	  isClosed = false;
     System.out.println
       ("Server listening for connections on port " + getPort());
   }
@@ -228,7 +228,7 @@ public class EchoServer extends AbstractServer
   @Override
   protected void serverStopped()
   {
-	  //isClosed = true;
+	 isClosed = true;
     System.out.println
       ("Server has stopped listening for connections.");
   }

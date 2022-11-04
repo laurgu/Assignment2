@@ -69,24 +69,21 @@ public class ChatClient extends AbstractClient
    */
   public void handleMessageFromClientUI(String message)
   {
-	  boolean isCommand = false;
 	  if(message.startsWith("#")){
-		 isCommand = handleCommand(message);
+		 handleCommand(message);
 	  }
-	  
-	  if(!isCommand){
-		try
-	    {
-	      sendToServer(message);
-	    }
-	    catch(IOException e)
-	    {
-	      clientUI.display
-	        ("Could not send message to server.  Terminating client.");
-	      quit();
-	    }
-		
-	}
+	  else {
+		  try
+		    {
+		      sendToServer(message);
+		    }
+		   catch(IOException e)
+		    {
+		      clientUI.display
+		        ("Could not send message to server.  Terminating client.");
+		      quit();
+		    }
+	  }
 	
   }
   /**
@@ -97,7 +94,7 @@ public class ChatClient extends AbstractClient
    * return value is true. Otherwise it is false.
    */
  
-  private boolean handleCommand(String message) {
+  private void handleCommand(String message) {
 	  
 	  String commandSubstring ="";
 	  String portOrHost = "";
@@ -159,11 +156,9 @@ public class ChatClient extends AbstractClient
 	}
 	
 	else {
-		return false;
+		clientUI.display("Not a valid command");
 	}
-	
-	return true;
-	  
+		  
   }
   
   /**
